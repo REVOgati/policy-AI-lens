@@ -72,12 +72,12 @@ try:
     verified_data = extraction_result['data']
     edited_fields = []
     
-    # Example: User might correct client name and policy number
-    print(f"Original Client Name: {verified_data.get('client_name')}")
+    # Example: User might correct policy holder and policy number
+    print(f"Original Policy Holder: {verified_data.get('policy_holder')}")
     new_name = input("Enter corrected name (or press Enter to keep): ").strip()
     if new_name:
-        verified_data['client_name'] = new_name
-        edited_fields.append('client_name')
+        verified_data['policy_holder'] = new_name
+        edited_fields.append('policy_holder')
     
     print(f"\nOriginal Policy Number: {verified_data.get('policy_number')}")
     new_policy = input("Enter corrected policy number (or press Enter to keep): ").strip()

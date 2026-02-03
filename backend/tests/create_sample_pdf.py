@@ -25,12 +25,12 @@ def create_sample_policy():
     
     details = [
         "",
-        "Client Name: John Doe",
+        "Policy Holder: John Doe",
         "Policy Number: POL-2024-987654",
         "Insurer Name: SafeGuard Insurance Company",
         "Sum Insured: $500,000",
-        "Start Date: 2024-01-15",
-        "Expiry Date: 2025-01-14",
+        "Commencing Date: 2024-01-15",
+        "Expiring Date: 2025-01-14",
         "Premium Amount: $2,500",
         "Policy Type: Life Insurance",
         "",

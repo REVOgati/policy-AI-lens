@@ -36,7 +36,7 @@ async def extract_text_from_pdf(file_path: str) -> str:
         doc.close()
         
         # If we got any text, return it (lowered threshold for testing)
-        if len(extracted_text.strip()) > 1000:
+        if len(extracted_text.strip()) > 10000:
             print(f"✅ Extracted {len(extracted_text)} characters using PyMuPDF")
             return extracted_text
         else:

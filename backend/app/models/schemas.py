@@ -8,12 +8,12 @@ from datetime import date
 
 class PolicyData(BaseModel):
     """Extracted insurance policy data."""
-    client_name: Optional[str] = Field(None, description="Name of the policy holder")
+    policy_holder: Optional[str] = Field(None, description="Name of the policy holder")
     policy_number: Optional[str] = Field(None, description="Unique policy identifier")
     insurer_name: Optional[str] = Field(None, description="Name of the insurance company")
     sum_insured: Optional[str] = Field(None, description="Coverage amount")
-    start_date: Optional[str] = Field(None, description="Policy start date")
-    expiry_date: Optional[str] = Field(None, description="Policy expiry date")
+    commencing_date: Optional[str] = Field(None, description="Policy commencing date (YYYY-MM-DD)")
+    expiring_date: Optional[str] = Field(None, description="Policy expiring date (YYYY-MM-DD)")
     premium_amount: Optional[str] = Field(None, description="Premium amount")
     policy_type: Optional[str] = Field(None, description="Type of insurance policy")
 
