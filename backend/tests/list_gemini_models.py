@@ -20,7 +20,7 @@ try:
 except Exception as e:
     print(f"Error listing models: {e}")
     print("\nTrying common model names...")
-    
+
     common_models = [
         'gemini-pro',
         'gemini-1.5-pro',
@@ -28,7 +28,7 @@ except Exception as e:
         'models/gemini-pro',
         'models/gemini-1.5-pro',
     ]
-    
+
     for model_name in common_models:
         try:
             model = genai.GenerativeModel(model_name)

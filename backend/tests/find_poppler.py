@@ -18,7 +18,7 @@ search_paths = [
 for base_path in search_paths:
     if os.path.exists(base_path):
         print(f"\n✅ Found base path: {base_path}")
-        
+
         # Search for bin directories
         for root, dirs, files in os.walk(base_path):
             if 'bin' in dirs:
@@ -29,7 +29,8 @@ for base_path in search_paths:
                     print(f"   ✅ FOUND WORKING PATH: {bin_path}")
                     print(f"      pdftoppm.exe exists: {pdftoppm}")
                 else:
-                    print(f"   ⚠️  Found bin dir but no pdftoppm.exe: {bin_path}")
+                    print(
+                        f"   ⚠️  Found bin dir but no pdftoppm.exe: {bin_path}")
 
 print("\n" + "=" * 70)
 print("RECOMMENDED ACTION:")

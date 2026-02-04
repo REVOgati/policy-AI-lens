@@ -6,14 +6,14 @@ OPTION 1: Manual Download (Recommended)
 ----------------------------------------
 1. Download poppler for Windows:
    https://github.com/oschwartz10612/poppler-windows/releases/latest
-   
+
    Download file: Release-XX.XX.X-X.zip (latest version)
 
 2. Extract the ZIP file to:
-   C:\Program Files\poppler\
-   
+   C:\\Program Files\\poppler\
+
    After extraction, you should see:
-   C:\Program Files\poppler\Library\bin\
+   C:\\Program Files\\poppler\\Library\bin\
 
 3. Add to System PATH:
    - Press Win + X → System
@@ -22,7 +22,7 @@ OPTION 1: Manual Download (Recommended)
    - Under "System variables", find "Path"
    - Click "Edit"
    - Click "New"
-   - Add: C:\Program Files\poppler\Library\bin
+   - Add: C:\\Program Files\\poppler\\Library\bin
    - Click OK on all windows
 
 4. Restart terminal/VS Code
@@ -53,10 +53,10 @@ WHAT POPPLER IS NEEDED FOR:
 For now, text-based PDFs work without poppler!
 """
 
+import os
 print(__doc__)
 
 # Quick test
-import os
 poppler_path = r"C:\Program Files\poppler\Library\bin"
 if os.path.exists(poppler_path):
     print("✅ Poppler found at:", poppler_path)

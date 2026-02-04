@@ -38,6 +38,7 @@ Thumbs.db
 backend/uploads/*
 !backend/uploads/.gitkeep
 backend/app/google_credentials.json
+backend/results.json
 
 # Logs
 *.log

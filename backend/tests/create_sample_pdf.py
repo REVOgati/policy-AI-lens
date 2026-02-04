@@ -11,18 +11,19 @@ except ImportError:
     from reportlab.lib.pagesizes import letter
     from reportlab.pdfgen import canvas
 
+
 def create_sample_policy():
     filename = "sample_insurance_policy.pdf"
     c = canvas.Canvas(filename, pagesize=letter)
-    
+
     # Title
     c.setFont("Helvetica-Bold", 20)
     c.drawString(200, 750, "Insurance Policy Document")
-    
+
     # Policy Details
     c.setFont("Helvetica", 12)
     y = 700
-    
+
     details = [
         "",
         "Policy Holder: John Doe",
@@ -38,14 +39,15 @@ def create_sample_policy():
         "This policy provides comprehensive life insurance coverage",
         "subject to the terms outlined in this document.",
     ]
-    
+
     for line in details:
         c.drawString(100, y, line)
         y -= 20
-    
+
     c.save()
     print(f"✅ Sample PDF created: {filename}")
     return filename
+
 
 if __name__ == "__main__":
     create_sample_policy()

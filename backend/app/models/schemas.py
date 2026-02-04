@@ -1,21 +1,29 @@
 """
 Pydantic models for request/response validation.
 """
-from pydantic import BaseModel, Field
 from typing import Optional
-from datetime import date
+
+from pydantic import BaseModel, Field
 
 
 class PolicyData(BaseModel):
     """Extracted insurance policy data."""
-    policy_holder: Optional[str] = Field(None, description="Name of the policy holder")
-    policy_number: Optional[str] = Field(None, description="Unique policy identifier")
-    insurer_name: Optional[str] = Field(None, description="Name of the insurance company")
+    policy_holder: Optional[str] = Field(
+        None, description="Name of the policy holder")
+    policy_number: Optional[str] = Field(
+        None, description="Unique policy identifier")
+    insurer_name: Optional[str] = Field(
+        None, description="Name of the insurance company")
     sum_insured: Optional[str] = Field(None, description="Coverage amount")
-    commencing_date: Optional[str] = Field(None, description="Policy commencing date (YYYY-MM-DD)")
-    expiring_date: Optional[str] = Field(None, description="Policy expiring date (YYYY-MM-DD)")
+    commencing_date: Optional[str] = Field(
+        None, description="Policy commencing date (YYYY-MM-DD)")
+    expiring_date: Optional[str] = Field(
+        None, description="Policy expiring date (YYYY-MM-DD)")
     premium_amount: Optional[str] = Field(None, description="Premium amount")
-    policy_type: Optional[str] = Field(None, description="Type of insurance policy")
+    paid_amount: Optional[str] = Field(None, description="Amount paid by client")
+    balance_amount: Optional[str] = Field(None, description="Balance amount due")
+    policy_type: Optional[str] = Field(
+        None, description="Type of insurance policy")
 
 
 class ExtractionResponse(BaseModel):
@@ -38,5 +46,5 @@ class VerificationResponse(BaseModel):
     success: bool
     message: str
     accuracy_score: Optional[float] = None
-    total_fields: int = 8
+    total_fields: int = 7  # Varies: 6 for non-COMP, 7 for COMP
     edited_fields_count: int = 0

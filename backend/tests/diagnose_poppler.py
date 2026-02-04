@@ -12,7 +12,7 @@ base = r"C:\ProgramData\chocolatey\lib\poppler\tools"
 print(f"\n1. Checking base directory: {base}")
 if os.path.exists(base):
     print("   ✅ Base directory EXISTS")
-    
+
     # Step 2: List contents
     print("\n2. Contents of base directory:")
     try:
@@ -23,7 +23,7 @@ if os.path.exists(base):
             print(f"   - {item} ({item_type})")
     except Exception as e:
         print(f"   ❌ Error listing directory: {e}")
-    
+
     # Step 3: Search recursively for any .exe files
     print("\n3. Searching for ALL .exe files:")
     for root, dirs, files in os.walk(base):
@@ -32,7 +32,7 @@ if os.path.exists(base):
             print(f"\n   📁 {root}")
             for exe in exe_files:
                 print(f"      - {exe}")
-    
+
     # Step 4: Specifically look for pdftoppm.exe
     print("\n4. Searching specifically for pdftoppm.exe:")
     found = False
@@ -42,20 +42,20 @@ if os.path.exists(base):
             pdftoppm_path = os.path.join(root, 'pdftoppm.exe')
             print(f"   ✅ FOUND: {pdftoppm_path}")
             print(f"   📂 Directory to use: {root}")
-            
+
             # Test if file is accessible
             if os.path.exists(pdftoppm_path):
                 print(f"   ✅ File is accessible")
                 size = os.path.getsize(pdftoppm_path)
                 print(f"   📊 File size: {size:,} bytes")
             break
-    
+
     if not found:
         print("   ❌ pdftoppm.exe NOT FOUND in entire directory tree")
         print("\n   This means poppler was not properly extracted.")
         print("   Solution: Manually download and extract poppler")
         print("   URL: https://github.com/oschwartz10612/poppler-windows/releases")
-    
+
 else:
     print("   ❌ Base directory DOES NOT EXIST")
     print("   Poppler is not installed via Chocolatey")

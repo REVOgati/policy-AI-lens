@@ -22,19 +22,19 @@ print(f"   URL: {POPPLER_URL}")
 try:
     urllib.request.urlretrieve(POPPLER_URL, DOWNLOAD_PATH)
     print(f"   ✅ Downloaded to: {DOWNLOAD_PATH}")
-    
+
     print("\n2. Extracting...")
     print(f"   Target: {EXTRACT_TO}")
-    
+
     # Create directory if it doesn't exist
     os.makedirs(EXTRACT_TO, exist_ok=True)
-    
+
     # Extract zip
     with zipfile.ZipFile(DOWNLOAD_PATH, 'r') as zip_ref:
         zip_ref.extractall(EXTRACT_TO)
-    
+
     print("   ✅ Extracted successfully")
-    
+
     # Find bin directory
     print("\n3. Locating binaries...")
     for root, dirs, files in os.walk(EXTRACT_TO):
@@ -43,16 +43,16 @@ try:
             print(f"\n   Use this path in your code:")
             print(f"   {root}")
             break
-    
+
     # Cleanup
     os.remove(DOWNLOAD_PATH)
     print("\n✅ Installation complete!")
-    
+
 except PermissionError:
     print("\n❌ Permission denied!")
     print("   Please run this script as Administrator")
     print("   Or extract to a different location (e.g., project directory)")
-    
+
 except Exception as e:
     print(f"\n❌ Error: {e}")
     print("\n   ALTERNATIVE: Manual installation")
