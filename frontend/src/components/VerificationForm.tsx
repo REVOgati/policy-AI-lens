@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CheckCircle, Edit3, Calendar, DollarSign, FileText, User, Building, Shield } from 'lucide-react';
 import type { PolicyData, ExtractionResponse, VerificationResponse } from '../types/policy';
+import { apiConfig } from '../services/apiConfig';
 
 interface VerificationFormProps {
   extractedData: ExtractionResponse;
@@ -29,7 +30,7 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/verify`, {
+      const response = await fetch(apiConfig.endpoints.verify, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

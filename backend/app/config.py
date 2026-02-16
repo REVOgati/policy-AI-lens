@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     # Google Sheets Configuration (for Phase 3)
     google_sheets_credentials_file: str = ""
     google_sheet_id: str = ""
+    google_sheet_name: str = "Database_One"  # Name of the worksheet within the spreadsheet
 
     # CORS Settings
     cors_origins: list = [
@@ -39,8 +40,11 @@ class Settings(BaseSettings):
     ]
 
     class Config:
-        # Load environment variables from envs directory
-        env_file = os.path.join("envs", ".env.dev")
+        # Load environment file based on APP_ENV (defaults to 'dev' for development)
+        # Use 'dev' or 'prod' as the suffix
+        app_env = os.getenv("APP_ENV", "dev")
+        env_file = os.path.join("envs", f".env.{app_env}")
+        env_file_encoding = 'utf-8'
         case_sensitive = False
 
 

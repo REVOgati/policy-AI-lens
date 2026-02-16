@@ -1,12 +1,15 @@
 """
 Analytics route - provides insights into extraction performance.
 """
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from typing import List, Dict, Any
+import logging
 
 from app.services.results_storage import get_results_storage
+from app.services.sheets_service import get_sheets_service
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 @router.get("/analytics/results")
@@ -70,3 +73,40 @@ async def get_summary_stats() -> Dict[str, Any]:
         "low_accuracy_count": low,
         "most_edited_fields": [{"field": f, "count": c} for f, c in most_edited],
     }
+
+
+@router.get("/analytics/sheets")
+async def get_sheets_stats() -> Dict[str, Any]:
+    """
+    Get statistics from Google Sheets.
+    
+    Returns:
+        Dictionary with Google Sheets data statistics
+    """
+    try:
+        sheets_service = get_sheets_service()
+        
+        # Connect to sheets
+        if not sheets_service.connect():
+            raise HTTPException(
+                status_code=503,
+                detail="Failed to connect to Google Sheets"
+            )
+        
+        record_count = sheets_service.get_record_count()
+        avg_accuracy = sheets_service.get_average_accuracy()
+        
+        return {
+            "connected": True,
+            "total_records": record_count,
+            "average_accuracy": round(avg_accuracy, 2),
+            "sheet_name": sheets_service.settings.google_sheet_name,
+            "spreadsheet_id": sheets_service.settings.google_sheet_id
+        }
+        
+    except Exception as e:
+        logger.error(f"Failed to get Google Sheets stats: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to retrieve Google Sheets statistics: {str(e)}"
+        )

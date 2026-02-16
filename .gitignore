@@ -17,11 +17,21 @@ build/
 .env
 .env.*
 !.env.example
-*.env
 
-# Backend envs directory - ignore everything except example
-backend/envs/*
+# Backend environment files - ignore all except example
+backend/envs/.env.dev
+backend/envs/.env.prod
+backend/envs/.env.local
 !backend/envs/.env.example
+
+# Google Sheets credentials
+backend/app/google_credentials.json
+backend/credentials/
+*.json
+!backend/envs/.env.example
+!frontend/package.json
+!frontend/package-lock.json
+!backend/results.json
 
 # IDE
 .vscode/
@@ -56,11 +66,16 @@ frontend/out/
 frontend/build/
 frontend/dist/
 frontend/.env.local
+frontend/.env.development.local
 frontend/.env.production.local
-frontend/package-lock.json
+frontend/.env.development
+frontend/.env.production
+!frontend/.env.example
 frontend/yarn.lock
 
 # Temporary files
 *.tmp
 *.bak
 *.swp
+
+#Other .md files

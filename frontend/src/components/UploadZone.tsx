@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, FileText, AlertCircle } from 'lucide-react';
+import { apiConfig } from '../services/apiConfig';
 
 interface UploadZoneProps {
   onUploadSuccess: (fileId: string, filename: string) => void;
@@ -43,7 +44,7 @@ const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onUploadError 
       formData.append('file', file);
 
       // Upload to backend
-      const response = await fetch('http://localhost:8000/api/v1/upload', {
+      const response = await fetch(apiConfig.endpoints.upload, {
         method: 'POST',
         body: formData,
       });

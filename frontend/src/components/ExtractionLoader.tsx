@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Loader2, FileCheck, Brain, Sparkles } from 'lucide-react';
+import { apiConfig } from '../services/apiConfig';
 
 interface ExtractionLoaderProps {
   filename: string;
@@ -42,7 +43,7 @@ const ExtractionLoader: React.FC<ExtractionLoaderProps> = ({
     // Call extraction API
     const extractData = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/v1/extract/${fileId}`, {
+        const response = await fetch(apiConfig.endpoints.extract(fileId), {
           method: 'POST',
         });
 
