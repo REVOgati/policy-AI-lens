@@ -78,4 +78,19 @@ frontend/yarn.lock
 *.bak
 *.swp
 
-#Other .md files
+#Other .md files (documentation - keep only README files)
+# Backend documentation files
+backend/BACKEND_REVIEW.md
+backend/API_DOCUMENTATION.md
+
+# Root documentation files (keep only main README.md)
+GOOGLE_SHEETS_SETUP.md
+ENVIRONMENT_SETUP.md
+DOCKER_GUIDE.md
+DOCKER_EXPLAINED.md
+COMPLETENESS_AUDIT.md
+
+# Guide files (project planning/documentation)
+Guide_Files/roughwork.md
+Guide_Files/Phase_two_ideas.md
+Guide_Files/ai_insurance_ocr_automation_project_4_phase_implementation_guide.md
