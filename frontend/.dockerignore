@@ -1,0 +1,53 @@
+# ============================================
+# .dockerignore for Frontend
+# ============================================
+# Excludes files from Docker build context
+
+# Dependencies (we run npm ci in Dockerfile)
+# Exclude node_modules (will be installed in container)
+# Keep package-lock.json (required by npm ci for reproducible builds)
+node_modules/
+
+# Build output (created during docker build)
+dist/
+build/
+.vite/
+
+# Development files
+.env.development
+.env.local
+.env.development.local
+
+# Keep .env.production as template (but real values passed as build args)
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Documentation
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Docker
+Dockerfile
+.dockerignore

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Loader2, FileCheck, Brain, Sparkles } from 'lucide-react';
 import { apiConfig } from '../services/apiConfig';
+import logoImage from '../assets/images/totality-insurance-agency-logo.png';
 
 interface ExtractionLoaderProps {
   filename: string;
@@ -93,7 +94,7 @@ const ExtractionLoader: React.FC<ExtractionLoaderProps> = ({
       {/* Logo */}
       <div className="flex justify-center mb-8 md:mb-12">
         <img
-          src="/src/assets/images/totality-insurance-agency-logo.png"
+          src={logoImage}
           alt="Totality Insurance Agency"
           className="h-20 w-auto md:h-28 lg:h-32 object-contain"
         />

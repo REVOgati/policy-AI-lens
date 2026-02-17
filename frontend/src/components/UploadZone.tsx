@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Upload, FileText, AlertCircle } from 'lucide-react';
 import { apiConfig } from '../services/apiConfig';
+import logoImage from '../assets/images/totality-insurance-agency-logo.png';
 
 interface UploadZoneProps {
   onUploadSuccess: (fileId: string, filename: string) => void;
@@ -95,7 +96,7 @@ const UploadZone: React.FC<UploadZoneProps> = ({ onUploadSuccess, onUploadError 
       {/* Logo */}
       <div className="flex justify-center mb-8 md:mb-12">
         <img
-          src="/src/assets/images/totality-insurance-agency-logo.png"
+          src={logoImage}
           alt="Totality Insurance Agency"
           className="h-20 w-auto md:h-28 lg:h-32 object-contain"
         />

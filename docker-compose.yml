@@ -1,0 +1,255 @@
+# ============================================
+# Docker Compose - Orchestration Configuration
+# ============================================
+# Defines and runs multi-container Docker applications
+# Note: 'version' field is obsolete in Docker Compose v2+ and will be ignored
+
+# ============================================
+# SERVICES - Define containers to run
+# ============================================
+services:
+  # ------------------------------------------
+  # Backend Service (FastAPI)
+  # ------------------------------------------
+  backend:
+    # Build configuration
+    build:
+      context: ./backend              # Build context directory
+      dockerfile: Dockerfile          # Dockerfile location
+    
+    # Container name (easier to reference)
+    container_name: policy-ai-lens-backend
+    
+    # Restart policy
+    # always: Restart container if it stops (production)
+    # unless-stopped: Restart unless manually stopped
+    # no: Never restart (development)
+    restart: unless-stopped
+    
+    # Port mapping: host:container
+    # Access backend at http://localhost:8000
+    ports:
+      - "8000:8000"
+    
+    # Environment variables
+    # Option 1: Define inline (for non-sensitive values)
+    environment:
+      - APP_ENV=dev                   # Use dev config for local testing
+      - DEBUG=True                    # Enable debug mode
+      - HOST=0.0.0.0                  # Listen on all interfaces
+      - PORT=8000                     # Application port
+    
+    # Option 2: Load from .env file (for sensitive values)
+    # Use .env.dev for local Docker testing (has real API keys)
+    # Switch to .env.prod for production deployment
+    env_file:
+      - ./backend/envs/.env.dev
+    
+    # Volume mounts: local_path:container_path
+    # Persist data & provide credentials
+    volumes:
+      # Mount credentials folder
+      - ./backend/credentials:/app/credentials:ro  # :ro = read-only
+      # Mount uploads folder (persist uploaded PDFs)
+      - ./backend/uploads:/app/uploads
+      # Mount results file (persist analytics)
+      - ./backend/results.json:/app/results.json
+    
+    # Health check - Docker monitors container health
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s      # Check every 30 seconds
+      timeout: 10s       # Timeout after 10 seconds
+      retries: 3         # Retry 3 times before marking unhealthy
+      start_period: 40s  # Grace period on startup
+    
+    # Networks - allows containers to communicate
+    networks:
+      - policy-ai-lens-network
+
+  # ------------------------------------------
+  # Frontend Service (React/Vite + Nginx)
+  # ------------------------------------------
+  frontend:
+    # Build configuration with build arguments
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      # Build arguments - passed to Dockerfile ARG
+      args:
+        # For local Docker testing: use localhost
+        # For production: change to your production backend URL
+        VITE_API_BASE_URL: http://localhost:8000
+        VITE_APP_ENV: production
+    
+    container_name: policy-ai-lens-frontend
+    
+    restart: unless-stopped
+    
+    # Port mapping
+    # Access frontend at http://localhost:3000
+    ports:
+      - "3000:80"  # Map container port 80 to host port 3000
+    
+    # Dependency - ensures backend starts first
+    depends_on:
+      backend:
+        condition: service_healthy  # Wait until backend is healthy
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    
+    networks:
+      - policy-ai-lens-network
+
+# ============================================
+# NETWORKS - Define custom networks
+# ============================================
+# Custom bridge network allows containers to communicate by service name
+networks:
+  policy-ai-lens-network:
+    driver: bridge  # Default driver - isolated virtual network
+
+# ============================================
+# VOLUMES - Define named volumes (optional)
+# ============================================
+# Named volumes are managed by Docker (persist across container removal)
+# Currently using bind mounts (commented out for reference)
+# 
+# volumes:
+#   backend-uploads:
+#   backend-credentials:
+
+# ============================================
+# USAGE INSTRUCTIONS:
+# ============================================
+#
+# 1. FIRST TIME SETUP:
+#    - Ensure .env.prod exists in backend/envs/
+#    - Ensure credentials JSON exists in backend/credentials/
+#
+# 2. BUILD AND START (development):
+#    docker-compose up --build
+#    (Rebuilds images and starts containers)
+#
+# 3. START (after building):
+#    docker-compose up
+#    (Just starts containers)
+#
+# 4. START IN BACKGROUND (detached mode):
+#    docker-compose up -d
+#
+# 5. STOP CONTAINERS:
+#    docker-compose down
+#
+# 6. STOP AND REMOVE VOLUMES:
+#    docker-compose down -v
+#
+# 7. VIEW LOGS:
+#    docker-compose logs -f          # All services
+#    docker-compose logs -f backend  # Just backend
+#
+# 8. REBUILD A SPECIFIC SERVICE:
+#    docker-compose build backend
+#    docker-compose up -d backend
+#
+# 9. CHECK STATUS:
+#    docker-compose ps
+#
+# 10. EXECUTE COMMAND IN CONTAINER:
+#     docker-compose exec backend python -c "print('Hello')"
+#
+# ============================================
+# ARCHITECTURE:
+# ============================================
+#
+#  ┌─────────────────────────────────────────┐
+#  │  Host Machine (Your Computer)           │
+#  │                                         │
+#  │  ┌─────────────────────────────────┐   │
+#  │  │  Docker Network                  │   │
+#  │  │  (policy-ai-lens-network)        │   │
+#  │  │                                  │   │
+#  │  │  ┌──────────────┐               │   │
+#  │  │  │  Backend     │               │   │
+#  │  │  │  FastAPI     │:8000          │   │
+#  │  │  │              │◄──────┐       │   │
+#  │  │  └──────────────┘       │       │   │
+#  │  │         ▲                │       │   │
+#  │  │         │                │       │   │
+#  │  │  ┌──────────────┐       │       │   │
+#  │  │  │  Frontend    │       │       │   │
+#  │  │  │  Nginx       │:80    │       │   │
+#  │  │  │              ├───────┘       │   │
+#  │  │  └──────────────┘               │   │
+#  │  │                                  │   │
+#  │  └─────────────────────────────────┘   │
+#  │         ▲              ▲                │
+#  │    Port 3000      Port 8000            │
+#  └─────────────────────────────────────────┘
+#           │              │
+#      localhost:3000  localhost:8000
+#
+# ============================================
+# KEY CONCEPTS:
+# ============================================
+#
+# 1. SERVICE:
+#    - Each service = one container
+#    - Services can communicate using service names
+#    - Example: frontend calls http://backend:8000
+#
+# 2. NETWORKS:
+#    - Containers on same network can talk to each other
+#    - Isolated from other Docker networks
+#    - Service name = hostname (DNS resolution)
+#
+# 3. VOLUMES:
+#    - Persist data outside containers
+#    - Survive container restarts/removal
+#    - Share data between host and container
+#
+# 4. PORTS:
+#    - Format: "host_port:container_port"
+#    - Multiple containers can use same container port
+#    - But must use different host ports
+#
+# 5. DEPENDS_ON:
+#    - Control startup order
+#    - service_healthy: Wait for health check to pass
+#    - Doesn't guarantee application is ready (use health checks)
+#
+# 6. ENV_FILE:
+#    - Load environment variables from file
+#    - Keeps secrets out of docker-compose.yml
+#    - .env file should be in .gitignore
+#
+# 7. BUILD ARGS vs ENV:
+#    - Build args: Used during image build (compile-time)
+#    - Environment variables: Used at container runtime
+#    - Example: API URL is build arg (baked into JS bundle)
+#
+# ============================================
+# TROUBLESHOOTING:
+# ============================================
+#
+# Container won't start:
+#   docker-compose logs backend
+#
+# Network issues (frontend can't reach backend):
+#   docker-compose exec frontend ping backend
+#
+# File permission issues:
+#   chown -R $(id -u):$(id -g) backend/uploads
+#
+# Clean slate rebuild:
+#   docker-compose down -v
+#   docker-compose build --no-cache
+#   docker-compose up
+#
+# ============================================

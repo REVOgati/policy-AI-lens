@@ -12,7 +12,10 @@ pytesseract==0.3.10
 pdf2image==1.17.0
 PyMuPDF==1.23.8
 Pillow==10.2.0
-Poppler==24.08.0
+
+# Note: Poppler is a system library, not a Python package
+# It's installed in Dockerfile via apt-get if needed (we use PyMuPDF instead)
+
 # Google Gemini AI
 google-generativeai==0.3.2
 

@@ -30,3 +30,10 @@ Create a Google Cloud project
 Enable Sheets API
 Create a Service Account
 Download the credentials JSON file
+
+---------------------------
+1. Dockerize and deploy
+Project should store to sheets and create calendar reminders
+2. Code edits; extract registration number, and have manual contact input before calendar reminders
+3. Ability to search and extract by vehicle registration, name or expiry date(format normalized) and display user friendly
+4. Automated whatsapp texts? day before expiry at 9am OR automated listing to George of calls to make today including last premium...sent on gmail?

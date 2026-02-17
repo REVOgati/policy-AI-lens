@@ -1,0 +1,75 @@
+# ============================================
+# .dockerignore - Exclude files from Docker build context
+# ============================================
+# Why? Smaller build context = faster builds + smaller images
+# Files listed here won't be sent to Docker daemon during build
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments (we install packages via requirements.txt)
+policy_venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment files (passed as docker run arguments instead)
+envs/.env.dev
+envs/.env.prod
+.env
+.env.*
+*.env
+
+# Credentials (mounted as volume instead)
+credentials/*.json
+!credentials/.gitkeep
+!credentials/README.md
+
+# Testing files (not needed in production)
+tests/
+*.pytest_cache/
+.coverage
+htmlcov/
+
+# Uploaded files (mounted as volume instead)
+uploads/*
+!uploads/.gitkeep
+
+# Results (mounted as volume or stored in database)
+results.json
+
+# Development files
+.git/
+.gitignore
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation (not needed at runtime)
+*.md
+!README.md
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (avoid recursion)
+Dockerfile
+.dockerignore
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
