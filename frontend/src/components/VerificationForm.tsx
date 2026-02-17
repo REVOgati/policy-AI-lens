@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Edit3, Calendar, DollarSign, FileText, User, Building, Shield } from 'lucide-react';
+import { CheckCircle, Edit3, Calendar, DollarSign, FileText, User, Building, Shield, Phone, Car } from 'lucide-react';
 import type { PolicyData, ExtractionResponse, VerificationResponse } from '../types/policy';
 import { apiConfig } from '../services/apiConfig';
 import logoImage from '../assets/images/totality-insurance-agency-logo.png';
@@ -68,6 +68,9 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
     paid_amount: DollarSign,
     balance_amount: DollarSign,
     policy_type: Shield,
+    registration_no: Car,
+    contact: Phone,
+    vehicle_type: Car,
   };
 
   const fieldLabels = {
@@ -78,6 +81,9 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
     commencing_date: 'Commencing Date',
     expiring_date: 'Expiring Date',
     premium_amount: 'Premium Amount',
+    registration_no: 'Registration No',
+    contact: 'Contact',
+    vehicle_type: 'Vehicle Type',
     paid_amount: 'Paid Amount',
     balance_amount: 'Balance Amount',
     policy_type: 'Policy Type',
@@ -88,6 +94,16 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
     const isEdited = editedFields.has(field);
     const hasValue = formData[field] !== null && formData[field] !== '';
     const isDateField = field === 'commencing_date' || field === 'expiring_date';
+    
+    // Custom placeholders for specific fields
+    let placeholder = '';
+    if (isDateField) {
+      placeholder = 'DD/MM/YYYY';
+    } else if (field === 'vehicle_type') {
+      placeholder = 'e.g. commercial, private, motorcycle';
+    } else {
+      placeholder = `Enter ${fieldLabels[field].toLowerCase()}`;
+    }
 
     return (
       <div key={field} className="space-y-2">
@@ -122,7 +138,7 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
               ? 'border-orange-300 bg-orange-50'
               : 'border-gray-300 bg-white'
           }`}
-          placeholder={isDateField ? 'DD/MM/YYYY' : `Enter ${fieldLabels[field].toLowerCase()}`}
+          placeholder={placeholder}
         />
         {!hasValue && (
           <p className="text-xs text-orange-600 flex items-center space-x-1">
@@ -184,6 +200,7 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
               <span>Personal Information</span>
             </h3>
             {renderField('policy_holder')}
+            {renderField('contact')}
           </div>
 
           {/* Policy Details */}
@@ -195,6 +212,16 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
             {renderField('policy_number')}
             {renderField('policy_type')}
             {renderField('insurer_name')}
+          </div>
+
+          {/* Vehicle Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center space-x-2">
+              <Car className="h-5 w-5" />
+              <span>Vehicle Information</span>
+            </h3>
+            {renderField('registration_no')}
+            {renderField('vehicle_type')}
           </div>
 
           {/* Financial Information */}

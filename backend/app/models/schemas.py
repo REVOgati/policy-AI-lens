@@ -24,6 +24,12 @@ class PolicyData(BaseModel):
     balance_amount: Optional[str] = Field(None, description="Balance amount due")
     policy_type: Optional[str] = Field(
         None, description="Type of insurance policy")
+    registration_no: Optional[str] = Field(
+        None, description="Vehicle registration number (NTSA Kenya)")
+    contact: Optional[str] = Field(
+        None, description="Contact information")
+    vehicle_type: Optional[str] = Field(
+        None, description="Type of vehicle (e.g., commercial, private, motorcycle)")
 
 
 class ExtractionResponse(BaseModel):
@@ -46,5 +52,5 @@ class VerificationResponse(BaseModel):
     success: bool
     message: str
     accuracy_score: Optional[float] = None
-    total_fields: int = 7  # Varies: 6 for non-COMP, 7 for COMP
+    total_fields: int = 8  # Varies: 7 for non-COMP, 8 for COMP
     edited_fields_count: int = 0

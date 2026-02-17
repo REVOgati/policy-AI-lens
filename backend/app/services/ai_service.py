@@ -43,6 +43,7 @@ Return ONLY a valid JSON object with these exact fields (use null for missing va
 - paid_amount: Look for: "PAID", "Amount Paid", "Payment", "Paid Amount" (typically null, user will enter manually)
 - balance_amount: Look for: "BALANCE", "Balance Due", "Amount Due", "Outstanding" (typically null, user will enter manually)
 - policy_type: Look for: "Motor Third Party", "Comprehensive", "Third Party Fire & Theft", "Life", "Health" (type of insurance coverage)
+- registration_no: Look for: "REGISTRATION NO", "Registration Number", "Reg No", "Vehicle Registration", "Plate Number". This is a vehicle registration number as registered to vehicles in Kenya in line with NTSA (National Transport and Safety Authority). Common format includes letters and numbers (e.g., KXX 123Y)
 
 SPECIAL INSTRUCTIONS:
 - Carefully read ALL text in the document, including headers, tables, and fine print
@@ -51,6 +52,7 @@ SPECIAL INSTRUCTIONS:
 - Keep dates in their ORIGINAL format (DD/MM/YYYY or DD.MM.YYYY) - DO NOT convert format
 - If you see "Date: 17.11.2025" near digital signature, it's the certificate issue date, NOT a policy date
 - Many motor certificates don't include policy holder name, commencing date, or expiring date - this is normal
+- For vehicle registration numbers, look for Kenyan NTSA format (e.g., KAA 123B, KBA 456C)
 - Look carefully at the document structure - some fields may be implied or abbreviated
 - Pay attention to table layouts and field labels
 - Return ONLY the JSON object, no additional text or explanation
@@ -106,7 +108,7 @@ JSON Output:
                 # Configure for faster responses
                 generation_config = genai.types.GenerationConfig(
                     temperature=0.1,  # Low temperature for consistency
-                    max_output_tokens=2048,  # Increased for 9 fields
+                    max_output_tokens=2048,  # Increased for 11 fields
                 )
                 model = genai.GenerativeModel(
                     model_name,

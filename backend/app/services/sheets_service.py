@@ -102,15 +102,18 @@ class GoogleSheetsService:
             'Premium Amount',
             'Paid Amount',
             'Balance Amount',
+            'Registration No',
+            'Contact',
+            'Vehicle Type',
             'Accuracy Score (%)',
             'Edited Fields',
             'Status'
         ]
         
-        self.worksheet.update('A1:O1', [headers])
+        self.worksheet.update('A1:R1', [headers])
         
         # Format header row (bold)
-        self.worksheet.format('A1:O1', {
+        self.worksheet.format('A1:R1', {
             'textFormat': {'bold': True},
             'horizontalAlignment': 'CENTER',
             'backgroundColor': {'red': 0.9, 'green': 0.9, 'blue': 0.9}
@@ -161,6 +164,9 @@ class GoogleSheetsService:
                 policy_data.get('premium_amount', ''),
                 policy_data.get('paid_amount', ''),
                 policy_data.get('balance_amount', ''),
+                policy_data.get('registration_no', ''),
+                policy_data.get('contact', ''),
+                policy_data.get('vehicle_type', ''),
                 f"{accuracy_score:.1f}",
                 edited_fields_str,
                 status
@@ -208,8 +214,8 @@ class GoogleSheetsService:
                 if not self.connect():
                     return 0.0
             
-            # Get all accuracy scores (column M, index 13)
-            accuracy_col = self.worksheet.col_values(13)[1:]  # Skip header
+            # Get all accuracy scores (column P, index 16)
+            accuracy_col = self.worksheet.col_values(16)[1:]  # Skip header
             
             if not accuracy_col:
                 return 0.0

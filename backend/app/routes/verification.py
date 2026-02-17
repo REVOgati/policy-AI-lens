@@ -24,8 +24,8 @@ async def verify_policy_data(request: VerificationRequest):
     """
     try:
         # Calculate accuracy score with conditional field evaluation
-        # Fields always excluded: premium_amount, paid_amount, balance_amount (never in PDFs)
-        excluded_fields = {'premium_amount', 'paid_amount', 'balance_amount'}
+        # Fields always excluded: premium_amount, paid_amount, balance_amount, contact, vehicle_type (user-defined, never in PDFs)
+        excluded_fields = {'premium_amount', 'paid_amount', 'balance_amount', 'contact', 'vehicle_type'}
         
         # Check policy type for conditional sum_insured evaluation
         policy_type = request.verified_data.policy_type or ""
@@ -34,9 +34,9 @@ async def verify_policy_data(request: VerificationRequest):
         # If not comprehensive, sum_insured is always null (should not affect accuracy)
         if not is_comprehensive:
             excluded_fields.add('sum_insured')
-            total_fields = 6  # 10 total - 4 excluded (premium, paid, balance, sum_insured)
+            total_fields = 7  # 13 total - 6 excluded (premium, paid, balance, contact, vehicle_type, sum_insured)
         else:
-            total_fields = 7  # 10 total - 3 excluded (premium, paid, balance)
+            total_fields = 8  # 13 total - 5 excluded (premium, paid, balance, contact, vehicle_type)
         
         # Filter edited fields to only include fields used for accuracy
         accuracy_edited_fields = [

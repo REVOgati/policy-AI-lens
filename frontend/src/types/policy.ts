@@ -13,6 +13,9 @@ export interface PolicyData {
   paid_amount: string | null;
   balance_amount: string | null;
   policy_type: string | null;
+  registration_no: string | null;
+  contact: string | null;
+  vehicle_type: string | null;
 }
 
 export interface ExtractionResponse {
