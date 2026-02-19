@@ -4,7 +4,7 @@ Main FastAPI application entry point.
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
-from app.routes import upload, extraction, verification, analytics
+from app.routes import upload, extraction, verification, analytics, search
 
 # Initialize settings
 settings = get_settings()
@@ -34,6 +34,7 @@ app.include_router(
     prefix="/api/v1",
     tags=["verification"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["analytics"])
+app.include_router(search.router, prefix="/api/v1", tags=["search"])
 
 
 @app.get("/")

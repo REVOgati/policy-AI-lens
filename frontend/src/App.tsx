@@ -3,11 +3,12 @@ import UploadZone from './components/UploadZone';
 import ExtractionLoader from './components/ExtractionLoader';
 import VerificationForm from './components/VerificationForm';
 import ResultsDisplay from './components/ResultsDisplay';
+import SearchRecord from './components/SearchRecord';
 import type { ExtractionResponse, VerificationResponse } from './types/policy';
 
 import logo from './assets/images/totality-insurance-agency-logo.png';
 
-type MainPageState = 'main' | 'upload' | 'extracting' | 'verify' | 'complete';
+type MainPageState = 'main' | 'upload' | 'extracting' | 'verify' | 'complete' | 'search';
 
 function App() {
   const [page, setPage] = useState<MainPageState>('main');
@@ -69,7 +70,7 @@ function App() {
           </button>
           <button
             className="py-5 px-6 rounded-xl bg-white hover:bg-gray-100 text-blue-700 font-semibold text-lg shadow-lg transition-all border-2 border-blue-700"
-            onClick={() => alert('Search record coming soon!')}
+            onClick={() => setPage('search')}
           >
             Search record
           </button>
@@ -92,6 +93,11 @@ function App() {
 
   // Back button for all workflow pages except main
   const showBackButton = page !== 'main';
+
+  // Search record page
+  if (page === 'search') {
+    return <SearchRecord onBack={handleStartOver} />;
+  }
 
   // Existing workflow (Save new record)
   return (

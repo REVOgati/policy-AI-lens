@@ -32,3 +32,6 @@ aiofiles==23.2.1
 pytest==7.4.4
 pytest-asyncio==0.23.3
 httpx==0.26.0
+
+# Additional library for fuzzy matching
+rapidfuzz==3.6.2
