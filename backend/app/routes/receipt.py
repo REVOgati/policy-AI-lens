@@ -1,3 +1,8 @@
+from fastapi import Response
+# Keepalive endpoint
+@router.get("/keepalive")
+async def keepalive():
+    return Response(content="OK", status_code=200)
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -45,9 +50,9 @@ async def generate_receipt(data: ReceiptData):
             ("Policy Type", data.policy_type),
             ("Commencing Date", data.commencing_date),
             ("Expiring Date", data.expiring_date),
-            ("Premium Amount", data.premium_amount),
-            ("Paid Amount", data.paid_amount),
-            ("Balance Amount", data.balance_amount),
+            ("Premium Amount (Kshs.)", data.premium_amount),
+            ("Paid Amount (Kshs.)", data.paid_amount),
+            ("Balance Amount (Kshs.)", data.balance_amount),
             ("Registration No", data.registration_no),
             ("Vehicle Type", data.vehicle_type),
         ]

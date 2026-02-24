@@ -28,9 +28,9 @@ const fieldLabels: Record<string, string> = {
   policy_type: "Policy Type",
   commencing_date: "Commencing Date",
   expiring_date: "Expiring Date",
-  premium_amount: "Premium Amount",
-  paid_amount: "Paid Amount",
-  balance_amount: "Balance Amount",
+  premium_amount: "Premium Amount (Kshs.)",
+  paid_amount: "Paid Amount (Kshs.)",
+  balance_amount: "Balance Amount (Kshs.)",
   registration_no: "Registration No",
   vehicle_type: "Vehicle Type",
 };

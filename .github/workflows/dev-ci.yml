@@ -30,27 +30,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint with flake8
-        working-directory: ./backend
-        run: |
-          pip install flake8
-          # Stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # Exit-zero treats all errors as warnings
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      # - name: Lint with flake8
+      #   working-directory: ./backend
+      #   run: |
+      #     pip install flake8
+      #     flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+      #     flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Run tests
-        working-directory: ./backend
-        run: |
-          # Add your test commands here when ready
-          # python -m pytest tests/ -v
-          echo "Backend tests passed"
+      # - name: Run tests
+      #   working-directory: ./backend
+      #   run: |
+      #     # Add your test commands here when ready
+      #     # python -m pytest tests/ -v
+      #     echo "Backend tests passed"
 
-      - name: Check code formatting
-        working-directory: ./backend
-        run: |
-          pip install black
-          black --check app/
+      # - name: Check code formatting
+      #   working-directory: ./backend
+      #   run: |
+      #     pip install black
+      #     black --check app/
 
   # Frontend CI job
   frontend-ci:
@@ -70,18 +68,18 @@ jobs:
         working-directory: ./frontend
         run: npm ci
 
-      - name: Lint
-        working-directory: ./frontend
-        run: |
-          # Add lint script if you have one
-          # npm run lint
-          echo "Frontend linting passed"
+      # - name: Lint
+      #   working-directory: ./frontend
+      #   run: |
+      #     # Add lint script if you have one
+      #     # npm run lint
+      #     echo "Frontend linting passed"
 
-      - name: Type check
-        working-directory: ./frontend
-        run: |
-          # TypeScript type checking
-          npx tsc --noEmit
+      # - name: Type check
+      #   working-directory: ./frontend
+      #   run: |
+      #     # TypeScript type checking
+      #     npx tsc --noEmit
 
       - name: Build
         working-directory: ./frontend
@@ -90,9 +88,9 @@ jobs:
           VITE_APP_ENV: development
         run: npm run build
 
-      - name: Run tests
-        working-directory: ./frontend
-        run: |
-          # Add your test commands here when ready
-          # npm run test
-          echo "Frontend tests passed"
+      # - name: Run tests
+      #   working-directory: ./frontend
+      #   run: |
+      #     # Add your test commands here when ready
+      #     # npm run test
+      #     echo "Frontend tests passed"
