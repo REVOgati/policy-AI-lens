@@ -57,6 +57,28 @@ async def generate_receipt(data: ReceiptData):
             pdf.set_font("Arial", "", 12)
             pdf.cell(0, 10, value, ln=1, border=0)
 
+        # Space before signature section
+        pdf.ln(10)
+
+        # Kind Regards and Signatory
+        pdf.set_font("Arial", "", 12)
+        pdf.cell(0, 10, "Kind Regards,", ln=1)
+        pdf.cell(0, 8, "George K. Tirop", ln=1)
+
+        # Signature image
+        signature_path = os.path.join("app", "static", "mainSignature.png")
+        if os.path.exists(signature_path):
+            # Place signature, resize to fit as signature (width ~40, keep aspect)
+            y_before = pdf.get_y()
+            pdf.image(signature_path, x=10, y=y_before, w=40)
+            pdf.ln(22)  # Space after signature
+        else:
+            pdf.ln(18)
+
+        # Thank you message (bold, centered)
+        pdf.set_font("Arial", "B", 13)
+        pdf.cell(0, 16, "Thank you for Choosing Totality Insurance Agency!", ln=1, align="C")
+
         # Output PDF to bytes
         pdf_bytes = pdf.output(dest="S").encode("latin1")
         return StreamingResponse(io.BytesIO(pdf_bytes), media_type="application/pdf", headers={
