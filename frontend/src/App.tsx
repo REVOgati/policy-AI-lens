@@ -4,11 +4,12 @@ import ExtractionLoader from './components/ExtractionLoader';
 import VerificationForm from './components/VerificationForm';
 import ResultsDisplay from './components/ResultsDisplay';
 import SearchRecord from './components/SearchRecord';
+import GenerateReceipt from './components/GenerateReceipt';
 import type { ExtractionResponse, VerificationResponse } from './types/policy';
 
 import logo from './assets/images/totality-insurance-agency-logo.png';
 
-type MainPageState = 'main' | 'upload' | 'extracting' | 'verify' | 'complete' | 'search';
+type MainPageState = 'main' | 'upload' | 'extracting' | 'verify' | 'complete' | 'search' | 'generate-receipt';
 
 function App() {
   const [page, setPage] = useState<MainPageState>('main');
@@ -82,13 +83,18 @@ function App() {
           </button>
           <button
             className="py-5 px-6 rounded-xl bg-black hover:bg-gray-900 text-white font-semibold text-lg shadow-lg transition-all border-2 border-gray-900"
-            onClick={() => alert('Generate Receipt coming soon!')}
+            onClick={() => setPage('generate-receipt')}
           >
             Generate Receipt
           </button>
         </div>
       </div>
     );
+  }
+
+  // Generate receipt page (top-level)
+  if (page === 'generate-receipt') {
+    return <GenerateReceipt />;
   }
 
   // Back button for all workflow pages except main

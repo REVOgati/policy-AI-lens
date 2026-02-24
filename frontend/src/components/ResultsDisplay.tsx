@@ -169,6 +169,20 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             <span>Process Another Policy</span>
           </button>
 
+          {/* Success message and View Receipt button (if receipt available) */}
+          {verificationResult.receipt_url && (
+            <div className="flex flex-col items-center mt-4">
+              <div className="text-green-700 font-semibold mb-2">Receipt generated successfully!</div>
+              <a
+                href={verificationResult.receipt_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
+              >
+                View Receipt
+              </a>
+            </div>
+          )}
           {/* TODO: Add Google Sheets export button in Phase 3 */}
         </div>
 

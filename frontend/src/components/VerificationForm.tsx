@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import GenerateReceiptModal from './GenerateReceiptModal';
 import { CheckCircle, Edit3, Calendar, DollarSign, FileText, User, Building, Shield, Phone, Car } from 'lucide-react';
 import type { PolicyData, ExtractionResponse, VerificationResponse } from '../types/policy';
 import { apiConfig } from '../services/apiConfig';
@@ -20,6 +21,9 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
   const [formData, setFormData] = useState<PolicyData>(extractedData.data);
   const [editedFields, setEditedFields] = useState<Set<string>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showReceiptModal, setShowReceiptModal] = useState(false);
+  const [pendingReceipt, setPendingReceipt] = useState<PolicyData | null>(null);
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null);
 
   const handleFieldChange = (field: keyof PolicyData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -29,7 +33,6 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       const response = await fetch(apiConfig.endpoints.verify, {
         method: 'POST',
@@ -42,14 +45,42 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
           edited_fields: Array.from(editedFields),
         }),
       });
-
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.detail || 'Verification failed');
       }
-
       const data: VerificationResponse = await response.json();
       onVerificationComplete(data);
+    } catch (error) {
+      onVerificationError(error instanceof Error ? error.message : 'Verification failed');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Submit & Generate Receipt handler
+  const handleSubmitAndReceipt = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(apiConfig.endpoints.verify, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          extraction_id: extractedData.extraction_id,
+          verified_data: formData,
+          edited_fields: Array.from(editedFields),
+        }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Verification failed');
+      }
+      // On success, open receipt modal with verified data
+      setPendingReceipt(formData);
+      setShowReceiptModal(true);
     } catch (error) {
       onVerificationError(error instanceof Error ? error.message : 'Verification failed');
     } finally {
@@ -276,8 +307,8 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
             </div>
           </div>
 
-          {/* Submit Button */}
-          <div className="pt-6">
+          {/* Submit Buttons */}
+          <div className="pt-6 flex flex-col md:flex-row gap-4">
             <button
               type="submit"
               disabled={isSubmitting}
@@ -314,9 +345,77 @@ const VerificationForm: React.FC<VerificationFormProps> = ({
                 </>
               )}
             </button>
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleSubmitAndReceipt}
+              className="w-full py-4 px-6 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 flex items-center justify-center space-x-2"
+            >
+              {isSubmitting ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <FileText className="h-5 w-5" />
+                  <span>Submit & Generate Receipt</span>
+                </>
+              )}
+            </button>
           </div>
         </form>
       </div>
+      {/* Receipt Modal */}
+      {showReceiptModal && pendingReceipt && (
+        <GenerateReceiptModal
+          formData={pendingReceipt}
+          onClose={() => setShowReceiptModal(false)}
+          onReceiptGenerated={(url) => setReceiptUrl(url)}
+        />
+      )}
+      {/* Receipt Actions for Data Input Method */}
+      {receiptUrl && (
+        <div className="mt-6 flex flex-col items-center">
+          <div className="text-green-700 font-semibold mb-2">Receipt generated successfully!</div>
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <a
+              href={receiptUrl}
+              download="receipt.pdf"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            >
+              Download Receipt
+            </a>
+            <a
+              href={receiptUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800"
+            >
+              View Receipt
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
