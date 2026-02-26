@@ -1,9 +1,5 @@
-from fastapi import Response
-# Keepalive endpoint
-@router.get("/keepalive")
-async def keepalive():
-    return Response(content="OK", status_code=200)
-from fastapi import APIRouter, HTTPException
+
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from datetime import datetime
@@ -12,6 +8,11 @@ import io
 import os
 
 router = APIRouter()
+
+# Keepalive endpoint
+@router.get("/keepalive")
+async def keepalive():
+    return Response(content="OK", status_code=200)
 
 class ReceiptData(BaseModel):
     policy_number: str
